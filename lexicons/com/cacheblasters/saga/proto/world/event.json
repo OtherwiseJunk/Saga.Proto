@@ -1,0 +1,36 @@
+{
+  "lexicon": 1,
+  "id": "com.cacheblasters.saga.proto.world.event",
+  "description": "A record representing a world event, announcement, or narrative beat published by a realm's game master.",
+  "type": "record",
+  "key": "tid",
+  "record": {
+    "type": "object",
+    "required": ["title", "text", "createdAt"],
+    "properties": {
+      "title": { "type": "string", "maxLength": 256, "description": "The title of the world event." },
+      "text": { "type": "string", "maxLength": 4096, "description": "The main description of the event." },
+      "image": { "type": "blob", "accept": ["image/jpeg", "image/png"], "nullable": true, "description": "An optional image associated with the event." },
+      "type": {
+        "type": "string",
+        "knownValues": ["lore", "announcement", "alert", "narrative"],
+        "default": "narrative",
+        "description": "The classification of the event."
+      },
+      "locationRef": {
+        "type": "ref",
+        "ref": "com.atproto.repo.strongRef",
+        "nullable": true,
+        "description": "An optional strong reference to a location where this event is taking place or is relevant."
+      },
+      "expiresAt": {
+        "type": "string",
+        "format": "datetime",
+        "nullable": true,
+        "description": "An optional timestamp for when the event is no longer considered active."
+      },
+      "createdAt": { "type": "string", "format": "datetime" }
+    }
+  }
+}
+

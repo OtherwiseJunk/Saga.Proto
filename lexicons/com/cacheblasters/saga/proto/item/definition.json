@@ -1,0 +1,44 @@
+{
+  "lexicon": 1,
+  "id": "com.cacheblasters.saga.proto.item.definition",
+  "description": "Defines the master template for an item in Saga Proto, including its name, type, and base stats.",
+  "type": "record",
+  "key": "tid",
+  "record": {
+    "type": "object",
+    "required": ["name", "type", "createdAt"],
+    "properties": {
+      "name": { "type": "string", "maxLength": 64, "description": "The name of the item (e.g., 'Iron Sword')." },
+      "description": { "type": "string", "maxLength": 512, "nullable": true, "description": "A description of the item, potentially including lore." },
+      "image": { "type": "blob", "accept": ["image/jpeg", "image/png"], "nullable": true, "description": "An optional image representing the item." },
+      "type": {
+        "type": "string",
+        "knownValues": ["weapon", "armor", "consumable", "material", "quest", "trinket", "misc"],
+        "description": "The classification of the item, used for game logic."
+      },
+      "equipableSlot": {
+        "type": "string",
+        "nullable": true,
+        "knownValues": ["main_hand", "off_hand", "head", "chest", "legs", "feet", "hands", "ring", "amulet"],
+        "description": "If the item is equipable, this defines which slot it occupies."
+      },
+      "maxStackSize": {
+        "type": "integer",
+        "minimum": 1,
+        "default": 1,
+        "description": "The maximum number of this item that can be held in a single stack."
+      },
+      "maxDurability": {
+        "type": "integer",
+        "minimum": 1,
+        "nullable": true,
+        "description": "The maximum durability of the item, if applicable."
+      },
+      "effects": {
+        "type": "object", "nullable": true, "description": "Defines the game-mechanical effects of the item, e.g., {'damage': 10, 'heal': 25}."
+      },
+      "createdAt": { "type": "string", "format": "datetime" },
+      "metadata": { "type": "object", "nullable": true, "description": "Arbitrary key-value pairs for realm-specific properties." }
+    }
+  }
+}

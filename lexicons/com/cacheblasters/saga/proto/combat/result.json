@@ -1,0 +1,59 @@
+{
+  "lexicon": 1,
+  "id": "com.cacheblasters.saga.proto.combat.result",
+  "description": "Logs the outcome of a single combat action, created by a game logic service.",
+  "type": "record",
+  "key": "tid",
+  "defs": {
+    "outcomeEffect": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "knownValues": ["damage", "heal", "miss", "dodge", "parry", "status_effect_applied", "status_effect_resisted", "flee_success", "flee_fail"],
+          "description": "The mechanical type of the outcome."
+        },
+        "amount": {
+          "type": "integer",
+          "nullable": true,
+          "description": "The numerical value of the outcome (e.g., damage dealt, health restored)."
+        },
+        "statusEffectKey": {
+          "type": "string",
+          "nullable": true,
+          "description": "The unique key for the status effect involved, if any (e.g., 'poison')."
+        }
+      }
+    }
+  },
+  "record": {
+    "type": "object",
+    "required": ["combatRef", "actionRef", "actorRef", "effects", "narrative", "createdAt"],
+    "properties": {
+      "combatRef": {
+        "type": "ref",
+        "ref": "com.atproto.repo.strongRef",
+        "description": "A strong reference to the master combat instance record."
+      },
+      "actionRef": {
+        "type": "ref",
+        "ref": "com.atproto.repo.strongRef",
+        "description": "A strong reference to the combat.action record that produced this result."
+      },
+      "actorRef": {
+        "type": "ref",
+        "ref": "com.atproto.repo.strongRef",
+        "description": "A strong reference to the actor who performed the action."
+      },
+      "targetRef": { "type": "ref", "ref": "com.atproto.repo.strongRef", "nullable": true, "description": "A strong reference to the primary target of the action." },
+      "effects": {
+        "type": "array",
+        "items": { "type": "ref", "ref": "#outcomeEffect" }
+      },
+      "narrative": { "type": "string", "maxLength": 512, "description": "A user-facing description of what happened (e.g., 'You strike the Goblin for 8 damage!')." },
+      "createdAt": { "type": "string", "format": "datetime" }
+    }
+  }
+}
+

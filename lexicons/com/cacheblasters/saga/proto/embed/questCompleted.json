@@ -1,0 +1,15 @@
+{
+  "lexicon": 1,
+  "id": "com.cacheblasters.saga.proto.embed.questCompleted",
+  "description": "A custom embed object that represents a completed quest from Saga Proto, designed to be placed within a standard app.bsky.feed.post record.",
+  "type": "object",
+  "required": ["questRecord"],
+  "properties": {
+    "questRecord": {
+      "type": "ref",
+      "ref": "com.atproto.repo.strongRef",
+      "description": "A strong reference to the com.cacheblasters.saga.proto.quest.completed record."
+    }
+  }
+}
+

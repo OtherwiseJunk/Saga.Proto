@@ -1,0 +1,76 @@
+{
+  "lexicon": 1,
+  "id": "com.cacheblasters.saga.proto.quest.definition",
+  "description": "Defines the master template for a quest, including its objectives and rewards.",
+  "type": "record",
+  "key": "tid",
+  "defs": {
+    "objective": {
+      "type": "object",
+      "required": ["key", "description"],
+      "properties": {
+        "key": { "type": "string", "maxLength": 64, "description": "A unique key for this objective within the quest, e.g., 'goblins_slain'." },
+        "description": { "type": "string", "maxLength": 256, "description": "The user-facing text for this objective, e.g., 'Slay 10 Goblins'." },
+        "targetCount": { "type": "integer", "minimum": 1, "nullable": true, "description": "The target count for collection or kill objectives." }
+      }
+    },
+    "rewardItem": {
+      "type": "object",
+      "required": ["itemDefinitionRef", "quantity"],
+      "properties": {
+        "itemDefinitionRef": {
+          "type": "ref",
+          "ref": "com.atproto.repo.strongRef",
+          "description": "A strong reference to the item definition being rewarded."
+        },
+        "quantity": { "type": "integer", "minimum": 1, "default": 1 }
+      }
+    }
+  },
+  "record": {
+    "type": "object",
+    "required": ["name", "objectives", "createdAt"],
+    "properties": {
+      "name": { "type": "string", "maxLength": 128, "description": "The title of the quest." },
+      "description": { "type": "string", "maxLength": 1024, "description": "The detailed description or story of the quest." },
+      "type": {
+        "type": "string",
+        "knownValues": ["main", "side", "repeatable", "bounty", "event"],
+        "default": "side"
+      },
+      "objectives": {
+        "type": "array",
+        "items": { "type": "ref", "ref": "#objective" },
+        "maxLength": 20
+      },
+      "rewards": {
+        "type": "object",
+        "nullable": true,
+        "properties": {
+          "experience": { "type": "integer", "minimum": 0 },
+          "items": {
+            "type": "array",
+            "items": { "type": "ref", "ref": "#rewardItem" },
+            "maxLength": 10
+          },
+          "currencies": {
+            "type": "object",
+            "nullable": true,
+            "description": "A map of currency identifiers to the amount rewarded.",
+            "additionalProperties": { "type": "integer", "minimum": 1 }
+          }
+        }
+      },
+      "prerequisites": {
+        "type": "object",
+        "nullable": true,
+        "properties": {
+          "minLevel": { "type": "integer", "minimum": 1 },
+          "requiredQuestRefs": { "type": "array", "items": { "type": "ref", "ref": "com.atproto.repo.strongRef" }, "maxLength": 5, "description": "An array of strong references to other quest definitions that must be completed first." }
+        }
+      },
+      "createdAt": { "type": "string", "format": "datetime" },
+      "metadata": { "type": "object", "nullable": true, "description": "Arbitrary key-value pairs for realm-specific properties." }
+    }
+  }
+}

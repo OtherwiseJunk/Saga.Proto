@@ -1,0 +1,25 @@
+{
+  "lexicon": 1,
+  "id": "com.cacheblasters.saga.proto.quest.completed",
+  "description": "A record indicating that a character has successfully completed a quest, creating a permanent log of the achievement.",
+  "type": "record",
+  "key": "tid",
+  "record": {
+    "type": "object",
+    "required": ["questDefinitionRef", "completedAt", "startedAt"],
+    "properties": {
+      "questDefinitionRef": {
+        "type": "ref",
+        "ref": "com.atproto.repo.strongRef",
+        "description": "A strong reference to the master quest definition that was completed."
+      },
+      "startedAt": {
+        "type": "string",
+        "format": "datetime",
+        "description": "The timestamp when the quest was originally started."
+      },
+      "completedAt": { "type": "string", "format": "datetime", "description": "The timestamp when the quest was completed." }
+    }
+  }
+}
+

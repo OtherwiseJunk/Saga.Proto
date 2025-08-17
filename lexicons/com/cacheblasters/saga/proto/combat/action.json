@@ -1,0 +1,38 @@
+{
+  "lexicon": 1,
+  "id": "com.cacheblasters.saga.proto.combat.action",
+  "description": "Represents a single action taken by a participant during a combat encounter. This is a transient record, intended to be processed by a game logic service.",
+  "type": "record",
+  "key": "tid",
+  "record": {
+    "type": "object",
+    "required": ["combatRef", "actionType", "createdAt"],
+    "properties": {
+      "combatRef": {
+        "type": "ref",
+        "ref": "com.atproto.repo.strongRef",
+        "description": "A strong reference to the master combat instance record that this action belongs to."
+      },
+      "actionType": {
+        "type": "string",
+        "knownValues": ["attack", "defend", "use_item", "cast_ability", "flee"],
+        "description": "The type of action being performed."
+      },
+      "targetRef": {
+        "type": "ref",
+        "ref": "com.atproto.repo.strongRef",
+        "nullable": true,
+        "description": "A strong reference to the target of the action (a character profile or NPC record)."
+      },
+      "itemRef": {
+        "type": "ref",
+        "ref": "com.atproto.repo.strongRef",
+        "nullable": true,
+        "description": "If using an item, a strong reference to the item.instance record in the actor's repository."
+      },
+      "abilityKey": { "type": "string", "maxLength": 64, "nullable": true, "description": "The unique key for the ability being used (e.g., 'fireball')." },
+      "createdAt": { "type": "string", "format": "datetime" }
+    }
+  }
+}
+

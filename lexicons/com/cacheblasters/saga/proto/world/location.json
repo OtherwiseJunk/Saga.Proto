@@ -1,0 +1,52 @@
+{
+  "lexicon": 1,
+  "id": "com.cacheblasters.saga.proto.world.location",
+  "description": "Defines a location within the game world, such as a city, dungeon, or room.",
+  "type": "record",
+  "key": "tid",
+  "defs": {
+    "exit": {
+      "type": "object",
+      "required": ["name", "locationRef"],
+      "properties": {
+        "name": { "type": "string", "maxLength": 128, "description": "The user-facing name of the exit, e.g., 'A dark path leading north'." },
+        "description": { "type": "string", "maxLength": 256, "nullable": true, "description": "A short description of the exit." },
+        "locationRef": {
+          "type": "ref",
+          "ref": "com.atproto.repo.strongRef",
+          "description": "A strong reference to the destination location record."
+        }
+      }
+    }
+  },
+  "record": {
+    "type": "object",
+    "required": ["name", "description", "createdAt"],
+    "properties": {
+      "name": { "type": "string", "maxLength": 128, "description": "The name of the location." },
+      "description": { "type": "string", "maxLength": 2048, "description": "A detailed description of the location, its atmosphere, and notable features." },
+      "image": { "type": "blob", "accept": ["image/jpeg", "image/png"], "nullable": true, "description": "An optional image representing the location." },
+      "type": {
+        "type": "string",
+        "knownValues": ["region", "city", "dungeon", "building", "room", "shop", "inn"],
+        "nullable": true,
+        "description": "The classification of the location, used for game logic and UI."
+      },
+      "parentLocationRef": {
+        "type": "ref",
+        "ref": "com.atproto.repo.strongRef",
+        "nullable": true,
+        "description": "A reference to a parent location, for nesting (e.g., a room inside a building)."
+      },
+      "exits": {
+        "type": "array",
+        "items": { "type": "ref", "ref": "#exit" },
+        "maxLength": 50,
+        "description": "A list of exits from this location to others."
+      },
+      "createdAt": { "type": "string", "format": "datetime" },
+      "metadata": { "type": "object", "nullable": true, "description": "Arbitrary key-value pairs for realm-specific properties (e.g., {'isSafeZone': true})." }
+    }
+  }
+}
+

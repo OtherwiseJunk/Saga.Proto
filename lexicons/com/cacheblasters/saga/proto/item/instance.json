@@ -1,0 +1,38 @@
+{
+  "lexicon": 1,
+  "id": "com.cacheblasters.saga.proto.item.instance",
+  "description": "Represents a specific instance of an item held by a character in their inventory.",
+  "type": "record",
+  "key": "tid",
+  "record": {
+    "type": "object",
+    "required": ["itemDefinitionRef", "acquiredAt"],
+    "properties": {
+      "itemDefinitionRef": {
+        "type": "ref",
+        "ref": "com.atproto.repo.strongRef",
+        "description": "A strong reference to the master item definition (com.cacheblasters.saga.proto.item.definition)."
+      },
+      "quantity": {
+        "type": "integer",
+        "minimum": 1,
+        "default": 1,
+        "description": "The number of items in this stack. Defaults to 1."
+      },
+      "durability": {
+        "type": "integer",
+        "minimum": 0,
+        "nullable": true,
+        "description": "The current durability of the item, if applicable."
+      },
+      "equipped": {
+        "type": "boolean",
+        "default": false,
+        "description": "Indicates if the character is currently equipping this item."
+      },
+      "acquiredAt": { "type": "string", "format": "datetime" },
+      "metadata": { "type": "object", "nullable": true, "description": "Arbitrary key-value pairs for instance-specific data, like enchantments or unique properties." }
+    }
+  }
+}
+

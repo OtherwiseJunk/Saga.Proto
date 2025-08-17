@@ -1,0 +1,38 @@
+{
+  "lexicon": 1,
+  "id": "com.cacheblasters.saga.proto.chat.message",
+  "description": "A message sent by a player, scoped to a specific context like a location, party, or another player.",
+  "type": "record",
+  "key": "tid",
+  "record": {
+    "type": "object",
+    "required": ["text", "createdAt"],
+    "properties": {
+      "text": { "type": "string", "maxLength": 512, "description": "The content of the chat message." },
+      "context": {
+        "type": "object",
+        "nullable": true,
+        "description": "The context in which the message was sent. The presence of a field determines the scope. If null, it's global/realm chat.",
+        "properties": {
+          "locationRef": {
+            "type": "ref",
+            "ref": "com.atproto.repo.strongRef",
+            "description": "For local chat. A reference to the location where the message was sent."
+          },
+          "partyRef": {
+            "type": "ref",
+            "ref": "com.atproto.repo.strongRef",
+            "description": "For party chat. A reference to the party the message is for."
+          },
+          "recipientDid": {
+            "type": "string",
+            "format": "did",
+            "description": "For direct messages. The DID of the recipient."
+          }
+        }
+      },
+      "createdAt": { "type": "string", "format": "datetime" }
+    }
+  }
+}
+

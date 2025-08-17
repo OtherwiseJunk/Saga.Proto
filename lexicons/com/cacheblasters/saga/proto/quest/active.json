@@ -1,0 +1,29 @@
+{
+  "lexicon": 1,
+  "id": "com.cacheblasters.saga.proto.quest.active",
+  "description": "Represents a quest that a character has accepted and is currently progressing.",
+  "type": "record",
+  "key": "tid",
+  "record": {
+    "type": "object",
+    "required": ["questDefinitionRef", "status", "startedAt"],
+    "properties": {
+      "questDefinitionRef": {
+        "type": "ref",
+        "ref": "com.atproto.repo.strongRef",
+        "description": "A strong reference to the master quest definition record (com.cacheblasters.saga.proto.quest.definition)."
+      },
+      "status": {
+        "type": "string",
+        "knownValues": ["accepted", "in-progress"],
+        "description": "The current status of the quest for this character."
+      },
+      "progress": {
+        "type": "object",
+        "nullable": true,
+        "description": "Arbitrary key-value data tracking specific quest objectives (e.g., {'goblins_slain': 4, 'key_found': true})."
+      },
+      "startedAt": { "type": "string", "format": "datetime" }
+    }
+  }
+}

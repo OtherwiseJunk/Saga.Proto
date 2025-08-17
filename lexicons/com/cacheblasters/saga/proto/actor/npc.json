@@ -1,0 +1,66 @@
+{
+  "lexicon": 1,
+  "id": "com.cacheblasters.saga.proto.actor.npc",
+  "description": "Defines a Non-Player Character (NPC) within the game world, including their location, dialogue, and potential roles.",
+  "type": "record",
+  "key": "tid",
+  "defs": {
+    "vendorItem": {
+      "type": "object",
+      "required": ["itemDefinitionRef"],
+      "properties": {
+        "itemDefinitionRef": {
+          "type": "ref",
+          "ref": "com.atproto.repo.strongRef",
+          "description": "A strong reference to the item definition the NPC sells."
+        },
+        "price": {
+          "type": "object",
+          "nullable": true,
+          "description": "Optional override price for the item. If not set, a default price might be used.",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        }
+      }
+    }
+  },
+  "record": {
+    "type": "object",
+    "required": ["name", "locationRef", "createdAt"],
+    "properties": {
+      "name": { "type": "string", "maxLength": 128, "description": "The name of the NPC." },
+      "description": { "type": "string", "maxLength": 1024, "nullable": true, "description": "A description of the NPC's appearance and personality." },
+      "avatar": { "type": "blob", "accept": ["image/jpeg", "image/png"], "nullable": true, "description": "An image representing the NPC." },
+      "locationRef": {
+        "type": "ref",
+        "ref": "com.atproto.repo.strongRef",
+        "description": "A strong reference to the NPC's current location (a com.cacheblasters.saga.proto.world.location record)."
+      },
+      "dialogue": {
+        "type": "object",
+        "nullable": true,
+        "properties": {
+          "greeting": { "type": "string", "maxLength": 512, "description": "The initial line of dialogue the NPC says when interacted with." }
+        }
+      },
+      "vendorInfo": {
+        "type": "object",
+        "nullable": true,
+        "description": "Information about the items this NPC sells.",
+        "properties": {
+          "sells": { "type": "array", "items": { "type": "ref", "ref": "#vendorItem" }, "maxLength": 200 }
+        }
+      },
+      "questGiverInfo": {
+        "type": "object",
+        "nullable": true,
+        "description": "Information about the quests this NPC offers.",
+        "properties": {
+          "quests": { "type": "array", "items": { "type": "ref", "ref": "com.atproto.repo.strongRef" }, "maxLength": 50, "description": "A list of strong references to quest definitions this NPC can offer." }
+        }
+      },
+      "createdAt": { "type": "string", "format": "datetime" },
+      "metadata": { "type": "object", "nullable": true, "description": "Arbitrary key-value pairs for realm-specific properties (e.g., faction alignment)." }
+    }
+  }
+}
+

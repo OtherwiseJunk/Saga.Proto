@@ -1,0 +1,60 @@
+{
+  "lexicon": 1,
+  "id": "com.cacheblasters.saga.proto.actor.character.profile",
+  "description": "Defines the core profile and attributes of a Saga Proto player character.",
+  "type": "record",
+  "key": "self",
+  "record": {
+    "type": "object",
+    "required": [
+      "displayName",
+      "health",
+      "sanity",
+      "intellect",
+      "charisma",
+      "brawn",
+      "dexterity",
+      "createdAt"
+    ],
+    "properties": {
+      "displayName": { "type": "string", "maxLength": 64, "description": "The character's chosen name." },
+      "description": { "type": "string", "maxLength": 256, "nullable": true, "description": "A short description of the character's appearance or demeanor." },
+      "avatar": { "type": "blob", "accept": ["image/jpeg", "image/png"], "nullable": true, "description": "An optional image representing the character's avatar." },
+      "health": { "type": "integer", "minimum": 0, "description": "Current health points. When it reaches 0, the character is incapacitated." },
+      "maxHealth": { "type": "integer", "minimum": 1, "description": "Maximum health points." },
+      "sanity": { "type": "integer", "minimum": 0, "description": "Current sanity points. Loss can lead to madness effects." },
+      "maxSanity": { "type": "integer", "minimum": 1, "description": "Maximum sanity points." },
+      "intellect": { "type": "integer", "minimum": 1, "description": "Measures mental prowess, logic, and knowledge." },
+      "charisma": { "type": "integer", "minimum": 1, "description": "Measures social grace, persuasion, and presence." },
+      "brawn": { "type": "integer", "minimum": 1, "description": "Measures physical strength and resilience." },
+      "dexterity": { "type": "integer", "minimum": 1, "description": "Measures agility, reflexes, and precision." },
+      "experience": { "type": "integer", "minimum": 0, "default": 0, "description": "Accumulated experience points." },
+      "level": { "type": "integer", "minimum": 1, "default": 1, "description": "Character's current level." },
+      "locationRef": {
+        "type": "ref",
+        "ref": "com.atproto.repo.strongRef",
+        "nullable": true,
+        "description": "A strong reference to the character's current location (a com.cacheblasters.saga.proto.world.location record)."
+      },
+      "associatedBskyDid": {
+        "type": "string",
+        "format": "did",
+        "nullable": true,
+        "description": "The DID of the user's associated Bluesky social profile, for out-of-game integrations like DMs."
+      },
+      "currencies": {
+        "type": "object",
+        "nullable": true,
+        "description": "A map of currency identifiers to the amount the character possesses.",
+        "additionalProperties": { "type": "integer", "minimum": 0 }
+      },
+      "createdAt": { "type": "string", "format": "datetime", "description": "Timestamp when the character was created." },
+      "metadata": {
+        "type": "object",
+        "properties": {},
+        "nullable": true,
+        "description": "Arbitrary key-value pairs for additional, non-standard character data. Realms can use this to add their own stats/properties."
+      }
+    }
+  }
+}

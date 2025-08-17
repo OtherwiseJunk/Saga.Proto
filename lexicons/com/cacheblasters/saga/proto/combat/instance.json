@@ -1,0 +1,65 @@
+{
+  "lexicon": 1,
+  "id": "com.cacheblasters.saga.proto.combat.instance",
+  "description": "Defines a master record for a combat encounter, tracking participants, state, and turn order.",
+  "type": "record",
+  "key": "tid",
+  "defs": {
+    "participant": {
+      "type": "object",
+      "required": ["actorRef", "team"],
+      "properties": {
+        "actorRef": {
+          "type": "ref",
+          "ref": "com.atproto.repo.strongRef",
+          "description": "A strong reference to the participant's actor record (character.profile or npc)."
+        },
+        "team": {
+          "type": "string",
+          "description": "An identifier for the team the participant belongs to (e.g., 'players', 'enemies')."
+        },
+        "initiative": {
+          "type": "integer",
+          "nullable": true,
+          "description": "The participant's initiative roll, used to determine turn order."
+        }
+      }
+    }
+  },
+  "record": {
+    "type": "object",
+    "required": ["locationRef", "participants", "status", "round", "createdAt"],
+    "properties": {
+      "locationRef": {
+        "type": "ref",
+        "ref": "com.atproto.repo.strongRef",
+        "description": "A strong reference to the location where the combat is taking place."
+      },
+      "participants": {
+        "type": "array",
+        "items": { "type": "ref", "ref": "#participant" },
+        "maxLength": 50
+      },
+      "status": {
+        "type": "string",
+        "knownValues": ["active", "completed"],
+        "description": "The current state of the combat encounter."
+      },
+      "round": { "type": "integer", "minimum": 1, "default": 1, "description": "The current round number of the combat." },
+      "turnHolderRef": {
+        "type": "ref",
+        "ref": "com.atproto.repo.strongRef",
+        "nullable": true,
+        "description": "A strong reference to the participant whose turn it currently is."
+      },
+      "outcome": {
+        "type": "string",
+        "knownValues": ["victory", "defeat", "fled", "stalemate"],
+        "nullable": true,
+        "description": "The final outcome of the combat, set when the status becomes 'completed'."
+      },
+      "createdAt": { "type": "string", "format": "datetime" },
+      "endedAt": { "type": "string", "format": "datetime", "nullable": true }
+    }
+  }
+}
